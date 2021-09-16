@@ -233,6 +233,7 @@ refreshkeys ||
 
 #enable multilib
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+pacman -Syu
 
 for x in curl base-devel git ntp zsh; do
 	dialog --title "LARBS Installation" --infobox "Installing \`$x\` which is required to install and configure other programs." 5 70
@@ -309,6 +310,7 @@ echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
 
 sudo -u "$name" betterdiscordctl install
 systemctl enable ckb-next-daemon
+systemctl start ckb-next-daemon
 
 # Last message! Install complete!
 finalize
