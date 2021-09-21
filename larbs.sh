@@ -367,6 +367,7 @@ echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/
 echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
 
 sudo -u "$name" betterdiscordctl install
+sudo -u "$name" "~/Pictures/wallpaper.png"
 
 systemctl enable ckb-next-daemon
 systemctl start ckb-next-daemon
