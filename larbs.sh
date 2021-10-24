@@ -368,6 +368,7 @@ echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
 
 sudo -u "$name" git config --global user.name elwolf6
 sudo -u "$name" git config --global user.email elwolf6@protonmail.com
+sudo -u "$name" git config git config pull.rebase false
 
 systemctl enable ckb-next-daemon
 
