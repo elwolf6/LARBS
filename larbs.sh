@@ -152,7 +152,7 @@ Server = https://ftp.crifo.org/artix-universe/" >>/etc/pacman.conf
 			pacman -Sy --noconfirm >/dev/null 2>&1
 		fi
 		pacman --noconfirm --needed -S \
-			artix-keyring artix-archlinux-support >/dev/null 2>&1
+			artix-keyring artix-archlinux-support archlinux-keyring >/dev/null 2>&1
 		for repo in extra community; do
 			grep -q "^\[$repo\]" /etc/pacman.conf ||
 				echo "[$repo]
