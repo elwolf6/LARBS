@@ -6,7 +6,7 @@
 
 ### OPTIONS AND VARIABLES ###
 
-dotfilesrepo="https://github.com/elwolf6/nordic-dwm-rice"
+dotfilesrepo="https://github.com/elwolf6/rice"
 progsfile="https://raw.githubusercontent.com/elwolf6/LARBS/master/progs.csv"
 aurhelper="yay"
 repobranch="master"
