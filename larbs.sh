@@ -13,8 +13,66 @@ repobranch="master"
 
 ### FUNCTIONS ###
 
-installpkg() {
-	pacman --noconfirm --needed -S "$1" >/dev/null 2>&1
+installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
+
+error() { printf "%s\n" "$1" >&2; exit 1; }
+
+welcomemsg() { \
+	dialog --title "Welcome!" --msgbox "Welcome to elwolf's verion of Luke's Auto-Rice Bootstrapping Script!\\n\\nThis script will automatically install a fully-featured Linux desktop, which I use as my main machine.\\n\\n.t elwolf" 10 60
+
+	dialog --colors --title "Important Note!" --yes-label "All ready!" --no-label "Return..." --yesno "Be sure the computer you are using has current pacman updates and refreshed Arch keyrings.\\n\\nIf it does not, the installation of some programs might fail." 8 70
+	}
+
+getuserandpass() { \
+	# Prompts user for new username an password.
+	name=$(dialog --inputbox "First, please enter a name for the user account." 10 60 3>&1 1>&2 2>&3 3>&1) || exit 1
+	while ! echo "$name" | grep -q "^[a-z_][a-z0-9_-]*$"; do
+		name=$(dialog --no-cancel --inputbox "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _." 10 60 3>&1 1>&2 2>&3 3>&1)
+	done
+	pass1=$(dialog --no-cancel --passwordbox "Enter a password for that user." 10 60 3>&1 1>&2 2>&3 3>&1)
+	pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
+	while ! [ "$pass1" = "$pass2" ]; do
+		unset pass2
+		pass1=$(dialog --no-cancel --passwordbox "Passwords do not match.\\n\\nEnter password again." 10 60 3>&1 1>&2 2>&3 3>&1)
+		pass2=$(dialog --no-cancel --passwordbox "Retype password." 10 60 3>&1 1>&2 2>&3 3>&1)
+	done ;}
+
+usercheck() { \
+	! { id -u "$name" >/dev/null 2>&1; } ||
+	dialog --colors --title "WARNING!" --yes-label "CONTINUE" --no-label "No wait..." --yesno "The user \`$name\` already exists on this system. LARBS can install for a user already existing, but it will \\Zboverwrite\\Zn any conflicting settings/dotfiles on the user account.\\n\\nLARBS will \\Zbnot\\Zn overwrite your user files, documents, videos, etc., so don't worry about that, but only click <CONTINUE> if you don't mind your settings being overwritten.\\n\\nNote also that LARBS will change $name's password to the one you just gave." 14 70
+	}
+
+preinstallmsg() { \
+	dialog --title "Let's get this party started!" --yes-label "Let's go!" --no-label "No, nevermind!" --yesno "The rest of the installation will now be totally automated, so you can sit back and relax.\\n\\nIt will take some time, but when done, you can relax even more with your complete system.\\n\\nNow just press <Let's go!> and the system will begin installation!" 13 60 || { clear; exit 1; }
+	}
+
+adduserandpass() { \
+	# Adds user `$name` with password $pass1.
+	dialog --infobox "Adding user \"$name\"..." 4 50
+	useradd -m -g wheel -s /bin/zsh "$name" >/dev/null 2>&1 ||
+	usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
+	export repodir="/home/$name/.local/src"; mkdir -p "$repodir"; chown -R "$name":wheel "$(dirname "$repodir")"
+	echo "$name:$pass1" | chpasswd
+	unset pass1 pass2 ;}
+
+refreshkeys() { \
+	dialog --infobox "Refreshing Arch Keyring..." 4 40
+	pacman -Q artix-keyring >/dev/null 2>&1 && pacman --noconfirm -S artix-keyring artix-archlinux-support >/dev/null 2>&1
+	pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
+	}
+
+newperms() { # Set special sudoers settings for install (or after).
+	sed -i "/#LARBS/d" /etc/sudoers
+	echo "$* #LARBS" >> /etc/sudoers ;}
+
+manualinstall() { # Installs $1 manually. Used only for AUR helper here.
+	# Should be run after repodir is created and var is set.
+	dialog --infobox "Installing \"$1\", an AUR helper..." 4 50
+	sudo -u "$name" mkdir -p "$repodir/$1"
+	sudo -u "$name" git clone --depth 1 "https://aur.archlinux.org/$1.git" "$repodir/$1" >/dev/null 2>&1 ||
+		{ cd "$repodir/$1" || return 1 ; sudo -u "$name" git pull --force origin master;}
+	cd "$repodir/$1"
+	sudo -u "$name" -D "$repodir/$1" makepkg --noconfirm -si >/dev/null 2>&1 || return 1
 }
 
 error() {
@@ -354,6 +412,13 @@ EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
 # (like `shutdown` to run without password).
 echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-larbs-wheel-can-sudo
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/pacman -Syyuw --noconfirm,/usr/bin/pacman -S -u -y --config /etc/pacman.conf --,/usr/bin/pacman -S -y -u --config /etc/pacman.conf --" >/etc/sudoers.d/01-larbs-cmds-without-password
+echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
+
+sudo -u "$name" git config --global user.name elwolf6
+sudo -u "$name" git config --global user.email elwolf6@protonmail.com
+sudo -u "$name" git config git config pull.rebase false
+
+systemctl enable ckb-next-daemon
 
 # Last message! Install complete!
 finalize
