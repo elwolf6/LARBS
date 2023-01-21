@@ -259,27 +259,6 @@ vimplugininstall() {
 	sudo -u "$name" nvim -c "PlugInstall|q|q"
 }
 
-installffaddons(){
-	addontmp="$(mktemp -d)"
-	trap "rm -fr $addontmp" HUP INT QUIT TERM PWR EXIT
-	IFS='
-'
-	sudo -u "$name" mkdir -p "$pdir/extensions/"
-	for addon in $addonlist; do
-		file="${addon##*/}"
-		sudo -u "$name" curl -LOs "$addon" > "$addontmp/$file"
-		id="$(unzip -p "$file" manifest.json | grep "\"id\"")"
-		id="${id%\"*}"
-		id="${id##*\"}"
-		sudo -u "$name" mv "$file" "$pdir/extensions/$id.xpi"
-	done
-	# Fix a Vim Vixen bug with dark mode not fixed on upstream:
-	sudo -u "$name" mkdir -p "$pdir/chrome"
-	[ ! -f  "$pdir/chrome/userContent.css" ] && sudo -u "$name" echo ".vimvixen-console-frame {
-  color-scheme: light !important;
-}" > "$pdir/chrome/userContent.css"
-}
-
 finalize() {
 	whiptail --title "All done!" \
 		--msgbox "Congrats! Provided there were no hidden errors, the script completed successfully and all the programs and configuration files should be in place.\\n\\nTo run the new graphical environment, log out and log back in as your new user, then run the command \"startx\" to start the graphical environment (it will start automatically in tty1).\\n\\n.t Luke" 13 80
@@ -372,31 +351,6 @@ dbus-uuidgen >/var/lib/dbus/machine-id
 
 # Use system notifications for Brave on Artix
 echo "export \$(dbus-launch)" >/etc/profile.d/dbus.sh
-
-# All this below to get Pulse installed with add-ons and non-bad settings.
-
-whiptail --infobox "Setting browser privacy settings and add-ons..." 7 60
-
-addonlist="https://addons.mozilla.org/firefox/downloads/file/3929378/ublock_origin-1.42.0-an+fx.xpi
-https://addons.mozilla.org/firefox/downloads/file/3902154/decentraleyes-2.0.17.xpi
-https://addons.mozilla.org/firefox/downloads/file/4035245/istilldontcareaboutcookies-1.1.0.xpi
-https://addons.mozilla.org/firefox/downloads/file/4053589/darkreader-4.9.62.xpi
-https://addons.mozilla.org/firefox/downloads/file/4030629/tampermonkey-4.18.1.xpi
-https://addons.mozilla.org/firefox/downloads/file/4008928/saucenao-69.xpi"
-
-browserdir="/home/$name/.librewolf"
-profilesini="$browserdir/profiles.ini"
-
-# Start librewolf headless so it generates a profile. Then get that profile in a variable.
-sudo -u "$name" librewolf --headless >/dev/null 2>&1 &
-sleep 1
-profile="$(sed -n "/Default=.*.default-release/ s/.*=//p" "$profilesini")"
-pdir="$browserdir/$profile"
-
-[ -d "$pdir" ] && installffaddons
-
-# Kill the now unnecessary librewolf instance.
-pkill -u "$name" librewolf
 
 # Allow wheel users to sudo with password and allow several system commands
 # (like `shutdown` to run without password).
