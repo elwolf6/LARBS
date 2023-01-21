@@ -52,6 +52,7 @@ pacman -Sy --noconfirm archlinux-keyring
 basestrap /mnt base base-devel runit elogind-runit linux linux-firmware
 
 fstabgen -U /mnt >> /mnt/etc/fstab
+echo "//qwertyuiop-server/qwertyuiop /home/marroq/qwertyuiop-server cifs username=marroq,password=HateSuburbia2022!,iocharset=utf8,file_mode=0777,dir_mode=0777" >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
 rm tz.tmp
 mv comp /mnt/etc/hostname
