@@ -75,7 +75,7 @@ manualinstall() { # Installs $1 manually. Used only for AUR helper here.
 	sudo -u "$name" -D "$repodir/$1" makepkg --noconfirm -si >/dev/null 2>&1 || return 1
 }
 
-sudo -u "$name" git clone "https://github.com/sirzech30/libxft-bgra" "/home/$name/" >/dev/null 2>&1
+sudo -u "$name" git clone "https://github.com/sirzech30/libxft-bgra" "/home/$name/libxft-bgra" >/dev/null 2>&1
 sudo -u "$name" cd "/home/$name/libxft-bgra"
 sudo -u "$name" makepkg --noconfirm -si >/dev/null 2>&1
 
@@ -363,6 +363,12 @@ echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/
 echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
 
 sudo -u "$name" mkdir -p "/home/$name/qwertyuiop-server/"
+
+mkdir /run/runit
+mkdir /run/runit/service
+ln -s /etc/runit/sv/NetworkManager /run/runit/service
+ln -s /etc/runit/sv/ntpd /run/runit/service
+ln -s /etc/runit/sv/netmount /run/runit/service
 
 spicetify restore backup apply
 curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
