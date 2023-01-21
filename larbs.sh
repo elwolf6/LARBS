@@ -259,15 +259,6 @@ vimplugininstall() {
 	sudo -u "$name" nvim -c "PlugInstall|q|q"
 }
 
-makeuserjs(){
-	arkenfox="$pdir/arkenfox.js"
-	larbs="/home/$name/.config/firefox/larbs.js"
-	userjs="$pdir/user.js"
-	[ ! -f "$arkenfox" ] && curl -sL "https://raw.githubusercontent.com/arkenfox/user.js/master/user.js" > "$arkenfox"
-	cat "$arkenfox" "$larbs" > "$userjs"
-	chown "$name:wheel" "$arkenfox" "$userjs"
-}
-
 installffaddons(){
 	addontmp="$(mktemp -d)"
 	trap "rm -fr $addontmp" HUP INT QUIT TERM PWR EXIT
@@ -401,8 +392,6 @@ sudo -u "$name" librewolf --headless >/dev/null 2>&1 &
 sleep 1
 profile="$(sed -n "/Default=.*.default-release/ s/.*=//p" "$profilesini")"
 pdir="$browserdir/$profile"
-
-[ -d "$pdir" ] && makeuserjs
 
 [ -d "$pdir" ] && installffaddons
 
