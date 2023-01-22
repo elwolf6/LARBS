@@ -362,7 +362,8 @@ sudo -u "$name" mkdir -p "/home/$name/qwertyuiop-server/"
 
 rm -rf "/home/$name/go"
 
-spicetify restore backup apply
+spicetify restore
+spicetify backup apply
 curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
 
 # Last message! Install complete!
