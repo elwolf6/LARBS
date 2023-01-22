@@ -360,11 +360,6 @@ echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
 
 sudo -u "$name" mkdir -p "/home/$name/qwertyuiop-server/"
 
-sv
-ln -s /etc/runit/sv/NetworkManager /run/runit/service
-ln -s /etc/runit/sv/ntpd /run/runit/service
-ln -s /etc/runit/sv/netmount /run/runit/service
-
 spicetify restore backup apply
 curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
 
