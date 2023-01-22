@@ -80,7 +80,7 @@ cd /home/$name/libxft-bgra
 sudo -u "$name" makepkg -si << 'EOF'
 Y
 Y
-EOF >/dev/null 2>&1
+EOF
 
 error() {
 	# Log to stderr and exit with failure.
