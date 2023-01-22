@@ -360,6 +360,8 @@ echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-larbs-visudo-editor
 
 sudo -u "$name" mkdir -p "/home/$name/qwertyuiop-server/"
 
+sudo -u "$name" rm -rf ~/go
+
 spicetify restore backup apply
 curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
 
