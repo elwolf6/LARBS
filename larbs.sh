@@ -77,7 +77,10 @@ manualinstall() { # Installs $1 manually. Used only for AUR helper here.
 
 sudo -u "$name" git clone "https://github.com/sirzech30/libxft-bgra" "/home/$name/libxft-bgra" >/dev/null 2>&1
 cd /home/$name/libxft-bgra
-sudo -u "$name" makepkg -si | Y >/dev/null 2>&1
+sudo -u "$name" makepkg -si << 'EOF'
+Y
+Y
+EOF >/dev/null 2>&1
 
 error() {
 	# Log to stderr and exit with failure.
