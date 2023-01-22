@@ -153,7 +153,7 @@ Server = https://ftp.crifo.org/artix-universe/" >>/etc/pacman.conf
 		fi
 		pacman --noconfirm --needed -S \
 			artix-keyring artix-archlinux-support archlinux-keyring >/dev/null 2>&1
-		for repo in extra community; do
+		for repo in extra community multilib; do
 			grep -q "^\[$repo\]" /etc/pacman.conf ||
 				echo "[$repo]
 Include = /etc/pacman.d/mirrorlist-arch" >>/etc/pacman.conf
@@ -290,8 +290,8 @@ preinstallmsg || error "User exited."
 refreshkeys ||
 	error "Error automatically refreshing Arch keyring. Consider doing so manually."
 
-#enable multilib
-sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+#enable lib32
+sed -i "/\[lib32\]/,/Include/"'s/^#//' /etc/pacman.conf
 pacman -Syu
 
 for x in curl ca-certificates base-devel git ntp zsh; do
