@@ -17,7 +17,7 @@ dialog --defaultno --title "Time Zone select" --yesno "Do you want use the defau
 
 timedatectl set-ntp true
 
-cat <<EOF | gdisk /dev/sda
+cat <<EOF | gdisk /dev/nvme0n1
 o
 y
 n
