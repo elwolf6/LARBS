@@ -362,9 +362,9 @@ sudo -u "$name" mkdir -p "/home/$name/qwertyuiop-server/"
 
 rm -rf "/home/$name/go"
 
-chown -R $name /etc/spotify
-spicetify restore
+chown -R $name /opt/spotify
 spicetify backup apply
+spicetify restore
 curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
 
 # Last message! Install complete!
