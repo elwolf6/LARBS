@@ -54,7 +54,7 @@ pacman -Sy --noconfirm archlinux-keyring
 pacstrap /mnt base base-devel linux linux-firmware
 
 genfstab -U /mnt >> /mnt/etc/fstab
-echo "//192.168.1.236/qwertyuiop /home/$larbs_name/qwertyuiop-server cifs username=marroq,password=HateSuburbia2022!,iocharset=utf8,file_mode=0777,dir_mode=0777" >> /mnt/etc/fstab
+echo "//192.168.1.236/qwertyuiop /home/$larbs_name/qwertyuiop-server cifs username=marroq,password=123,iocharset=utf8,file_mode=0777,dir_mode=0777" >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
 rm tz.tmp
 mv comp /mnt/etc/hostname
