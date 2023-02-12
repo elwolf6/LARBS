@@ -403,6 +403,16 @@ dbus-uuidgen >/var/lib/dbus/machine-id
 # Use system notifications for Brave on Artix
 echo "export \$(dbus-launch)" >/etc/profile.d/dbus.sh
 
+# Enable tap to click
+[ ! -f /etc/X11/xorg.conf.d/40-libinput.conf ] && printf 'Section "InputClass"
+        Identifier "libinput touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+	# Enable left mouse button by tapping
+	Option "Tapping" "on"
+EndSection' >/etc/X11/xorg.conf.d/40-libinput.conf
+
 # All this below to get Librewolf installed with add-ons and non-bad settings.
 
 whiptail --infobox "Setting browser privacy settings and add-ons..." 7 60
