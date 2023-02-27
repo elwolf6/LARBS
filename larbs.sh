@@ -304,10 +304,9 @@ installffaddons(){
 		id="${id##*\"}"
 		sudo -u "$name" mv "$file" "$pdir/extensions/$id.xpi"
 	done
-	# Fix a Vim Vixen bug with dark mode not fixed on upstream:
+	# Hide native horizontal tabs
 	sudo -u "$name" mkdir -p "$pdir/chrome"
-	[ ! -f  "$pdir/chrome/userContent.css" ] && sudo -u "$name" echo ".vimvixen-console-frame { color-scheme: light !important; }
-#category-more-from-mozilla { display: none !important }" > "$pdir/chrome/userContent.css"
+	[ ! -f  "$pdir/chrome/userChrome.css" ] && sudo -u "$name" echo "#TabsToolbar { visibility: collapse; }" > "$pdir/chrome/userChrome.css"
 }
 
 finalize() {
