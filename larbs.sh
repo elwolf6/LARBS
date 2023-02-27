@@ -290,7 +290,7 @@ Exec=/usr/local/lib/arkenfox-auto-update" > /etc/pacman.d/hooks/arkenfox.hook
 }
 
 installffaddons(){
-	addonlist="ublock-origin decentraleyes istilldontcareaboutcookies 0t-reverse tampermonkey darkreader vim-vixen"
+	addonlist="ublock-origin decentraleyes istilldontcareaboutcookies 0t-reverse tampermonkey darkreader nord-polar-night-theme tree-style-tab"
 	addontmp="$(mktemp -d)"
 	trap "rm -fr $addontmp" HUP INT QUIT TERM PWR EXIT
 	IFS=' '
