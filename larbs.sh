@@ -290,7 +290,7 @@ Exec=/usr/local/lib/arkenfox-auto-update" > /etc/pacman.d/hooks/arkenfox.hook
 }
 
 installffaddons(){
-	addonlist="ublock-origin decentraleyes istilldontcareaboutcookies image-search-options tampermonkey nord-polar-night-theme tree-style-tab dont-accept-webp jkcs dont-accept-webp"
+	addonlist="ublock-origin decentraleyes istilldontcareaboutcookies image-search-options tampermonkey nord-polar-night-theme tree-style-tab dont-accept-webp jkcs dont-accept-webp checkmarks-web-ext"
 	addontmp="$(mktemp -d)"
 	trap "rm -fr $addontmp" HUP INT QUIT TERM PWR EXIT
 	IFS=' '
