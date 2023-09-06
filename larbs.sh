@@ -446,7 +446,10 @@ chown -R "$name" /opt/spotify
 sudo -u "$name" spicetify backup apply
 sudo -u "$name" spicetify restore
 sudo -u "$name" curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
-
+sudo -u "$name" mkdir /home/${name}/.tmux
+sudo -u "$name" mkdir /home/${name}/.tmux/themes/
+sudo -u "$name" cd /home/${name}/.tmux/themes/
+sudo -u "$name" git clone https://github.com/arcticicestudio/nord-tmux
 # Last message! Install complete!
 finalize
 #clear
