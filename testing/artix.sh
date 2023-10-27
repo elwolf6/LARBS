@@ -52,11 +52,10 @@ pacman -Sy --noconfirm archlinux-keyring
 basestrap /mnt base base-devel runit elogind-runit linux linux-firmware
 
 fstabgen -U /mnt >> /mnt/etc/fstab
-echo "//192.168.1.236/qwertyuiop /home/$larbs_name/qwertyuiop-server cifs username=marroq,password=123,iocharset=utf8,file_mode=0777,dir_mode=0777" >> /mnt/etc/fstab
 cat tz.tmp > /mnt/tzfinal.tmp
 rm tz.tmp
 mv comp /mnt/etc/hostname
-curl https://raw.githubusercontent.com/elwolf6/LARBS/master/testing/chroot.sh > /mnt/chroot.sh && artix-chroot /mnt bash chroot.sh && rm /mnt/chroot-runit.sh
+curl https://raw.githubusercontent.com/ewof/LARBS-legacy/master/testing/chroot.sh > /mnt/chroot.sh && artix-chroot /mnt bash chroot.sh && rm /mnt/chroot-runit.sh
 
 
 dialog --defaultno --title "Final Qs" --yesno "Reboot computer?"  5 30 && reboot
